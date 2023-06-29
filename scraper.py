@@ -2,11 +2,12 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 import sys
+import pandas as pd
 
 # Set console encoding to UTF-8
 sys.stdout.reconfigure(encoding='utf-8')
+ 
 
-youtube_treding_url = 'https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl'
 
 #Initializing Selenium Chrome Web Driver
 def get_driver():
@@ -17,14 +18,14 @@ def get_driver():
     return webdriver.Chrome(options=chrome_options)
 
 
-#Getting the title of the Webpage
-def get_title(driver):
-    driver.get(youtube_treding_url)
+
+    driver.get(url)
     print('Page title: ', driver.title)
 
 
 #Getting the list of the top trending videos
-def get_videos(driver):
+def get_videos(driver,url):
+    driver.get(url)
     print("Getting videos")
     videos = driver.find_elements(By.TAG_NAME,'ytd-video-renderer')
     print(f"{len(videos)} fetched.")
@@ -32,7 +33,7 @@ def get_videos(driver):
 
 
 #Getting the title
-def get_title(video): 
+def get_video_title(video): 
     title_tag = video.find_element(By.ID,'video-title')
     title = title_tag.text
     return title
@@ -75,9 +76,8 @@ def get_uploaded_on(video):
     views_tag = video.find_element(By.TAG_NAME,'ytd-video-meta-block')
     views_list = []
     views_list = views_tag.find_element(By.CLASS_NAME,"ytd-video-meta-block").text.split('\n')
-    views = views_list[-2]
-    uploaded_on = views[-1]
-    return views
+    uploaded_on = views_list[-1]
+    return uploaded_on
 
 
 #Getting the video description
@@ -87,68 +87,55 @@ def get_description(video):
     return desc
 
 
+##Puting it all togather 
 
+def parse_trending_videos(video):   
+    #Getting the video title
+    video_title = get_video_title(video)
 
+    #Get video URL
+    video_url = get_url(video)
+
+    #Get video thumbnail
+    thumbnail = get_thumbnail(video)
+    
+    #Get channel name
+    channel_name = get_channel_name(video)
+
+    #Get channel url
+    channel_url = get_channel_url(video)
+
+    #Get view count
+    views = get_views(video)
+
+    #Getting uploaded on
+    uploaded_on=get_uploaded_on(video)
+
+    #Get video description
+    desc = get_description(video)
+
+    result_dict = {'video_title':video_title,
+                    'video_url':video_url,
+                    'thumbnail':thumbnail,
+                    'channel_name':channel_name,
+                    'channel_url':channel_url,
+                    'views':views,
+                    'uploaded':uploaded_on,
+                    'description':desc
+                    }
+    return result_dict
+
+   
 
 if __name__ == "__main__":
-    # print("Getting driver")
-    # driver = get_driver()
-    # driver.get(youtube_treding_url)
-    
-
-    # print("Getting videos")
-    # videos = driver.find_elements(By.TAG_NAME,'ytd-video-renderer')
-    # print(f'Found {len(videos)} videos')
-
-    # print("Parsing the first video")
-    # #Title,url,tumbnail_url,channel,view,uploaded,description
-    # video =videos[0]
-
-    # #Getting the title
-    # title_tag = video.find_element(By.ID,'video-title')
-    # title = title_tag.text
-
-    # #Getting the URL
-    # url = title_tag.get_attribute('href')
-
-    # #Getting the thumbnail
-    # thumbnail_tag = video.find_element(By.ID,'thumbnail')
-    # thumbnail = thumbnail_tag.get_attribute('href')
-
-    # #Getting channel name
-    # channel_tag = video.find_element(By.CLASS_NAME,'yt-formatted-string')
-    # channel_name = channel_tag.text
-
-    # #Getting the channel url
-    # channel_url = channel_tag.get_attribute('href')
-
-    # #Getting the view count and upload
-    # views_tag = video.find_element(By.TAG_NAME,'ytd-video-meta-block')
-    # views_list = []
-    # views_list = views_tag.find_element(By.CLASS_NAME,"ytd-video-meta-block").text.split('\n')
-    # views = views_list[-2]
-    # uploaded_on = views_list[-1]
+    youtube_treding_url = 'https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl'
+    driver = get_driver()
+    videos = get_videos(driver,youtube_treding_url)
 
     
+    result=[parse_trending_videos(video) for video in videos]
+    # print(result)
     
-    # #Getting the description
-    # description_tag = video.find_element(By.ID,'description-text')
-    # desc = description_tag.text
-
-
-
-
-    # print("Title: ",title)
-    # print("URL: ",url)
-    # print("Thumbnail: ",thumbnail)
-    # print('Channel_name: ',channel_name)
-    # print('Channel_url: ',channel_url)
-    # print('Views: ',views)
-    # print('Uploaded: ',uploaded_on)
-    # print("Description: ",desc)
-
-     
-
-    
-
+    trending_df = pd.DataFrame(result,index=None)
+    print(trending_df)
 
