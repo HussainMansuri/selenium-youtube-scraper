@@ -139,3 +139,5 @@ if __name__ == "__main__":
     trending_df = pd.DataFrame(result,index=None)
     print(trending_df)
 
+    trending_df.to_csv('trending_videos.csv',index=0)
+
