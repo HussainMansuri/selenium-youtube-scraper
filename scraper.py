@@ -2,6 +2,7 @@ from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.common.by import By
 import sys
+import time
 import pandas as pd
 
 # Set console encoding to UTF-8
@@ -26,7 +27,8 @@ def get_driver():
 #Getting the list of the top trending videos
 def get_videos(driver,url):
     driver.get(url)
-    print("Getting videos")
+    print("Getting videos...")
+    time.sleep(5)
     videos = driver.find_elements(By.TAG_NAME,'ytd-video-renderer')
     print(f"{len(videos)} fetched.")
     return videos
@@ -44,11 +46,11 @@ def get_url(video):
     url = title_tag.get_attribute('href')
     return url
      
-#Getting the video thumbnail
-def get_thumbnail(video):
-    thumbnail_tag = video.find_element(By.ID,'thumbnail')
-    thumbnail = thumbnail_tag.get_attribute('href')
-    return thumbnail
+#Getting the video thumbnail functionality to be added later
+# def get_thumbnail(video):
+#     thumbnail_tag = video.find_element(By.CLASS_NAME,'yt-core-image')
+#     thumbnail = thumbnail_tag.get_attribute('src')
+#     return thumbnail
 
 #Getting the channel name
 def get_channel_name(video):
@@ -116,7 +118,7 @@ def parse_trending_videos(video):
 
     result_dict = {'video_title':video_title,
                     'video_url':video_url,
-                    'thumbnail':thumbnail,
+                    # 'thumbnail':thumbnail,
                     'channel_name':channel_name,
                     'channel_url':channel_url,
                     'views':views,
