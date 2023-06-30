@@ -4,7 +4,9 @@ from selenium.webdriver.common.by import By
 import sys
 import time
 import pandas as pd
-
+import mailer as ml
+import os
+import config 
 
 
 # Set console encoding to UTF-8
@@ -100,8 +102,8 @@ def parse_trending_videos(video):
     #Get video URL
     video_url = get_url(video)
 
-    #Get video thumbnail
-    thumbnail = get_thumbnail(video)
+    # #Get video thumbnail
+    # thumbnail = get_thumbnail(video)
     
     #Get channel name
     channel_name = get_channel_name(video)
@@ -147,11 +149,15 @@ if __name__ == "__main__":
 
     #Sending email
 
+     
+     email_login = config.email
+     app_pass = config.app_pass
+    
+
+     ml.gmail_send_mail('Mansuri Hussain','Hussain Mansuri','EMAIL INSIDE FUNCTION TEST','''This mail was sent from scrpaer.py by calling the mailer.py module''',
+                       email_login,app_pass,"mansurihussain12345@gmail.com",'hussainmansuri12345@gmail.com')
     
 
 
-
-
-appP= "lnqpdrsvuqeuuzze"
 
 

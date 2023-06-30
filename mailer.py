@@ -4,29 +4,29 @@ from email.mime.text import MIMEText
 
 
 
-def send_mail():
+def gmail_send_mail(to_name,from_name,subject,message_body,login_email,login_password,from_addrs,to_address):
     
         message = MIMEMultipart()
-        message["To"] = 'Mansuri Hussain'
-        message["From"] = 'Hussain Mansuri'
-        message["Subject"] = 'TEST MAIL'
+        message["To"] = to_name
+        message["From"] = from_name
+        message["Subject"] = subject
 
-        title = '<b> TESTING EMAIL SENDING PYTHON CODE </b>'
-        messageText = MIMEText('''This mail was sent from my python code.''','html')
+        # title = '<b> TESTING EMAIL SENDING PYTHON CODE </b>'
+        messageText = MIMEText(message_body,'html')
         message.attach(messageText)
 
-        email = 'mansurihussain12345@gmail.com'
-        password = 'lnqpdrsvuqeuuzze'
+        email = login_email
+        password = login_password
 
         server = smtplib.SMTP('smtp.gmail.com:587')
         server.ehlo('Gmail')
         server.starttls()
         server.login(email,password)
-        fromaddr = 'mansurihussain12345@gmail.com'
-        toaddrs  = 'hussainmansuri12345@gmail.com'
+        fromaddr = from_addrs
+        toaddrs  = to_address
         server.sendmail(fromaddr,toaddrs,message.as_string())
 
         server.quit()
 
 
-send_mail()
+
