@@ -5,6 +5,8 @@ import sys
 import time
 import pandas as pd
 
+
+
 # Set console encoding to UTF-8
 sys.stdout.reconfigure(encoding='utf-8')
  
@@ -130,16 +132,26 @@ def parse_trending_videos(video):
    
 
 if __name__ == "__main__":
-    youtube_treding_url = 'https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl'
-    driver = get_driver()
-    videos = get_videos(driver,youtube_treding_url)
+    # youtube_treding_url = 'https://www.youtube.com/feed/trending?bp=6gQJRkVleHBsb3Jl'
+    # driver = get_driver()
+    # videos = get_videos(driver,youtube_treding_url)
 
     
-    result=[parse_trending_videos(video) for video in videos]
-    # print(result)
+    # result=[parse_trending_videos(video) for video in videos]
+    # # print(result)
     
-    trending_df = pd.DataFrame(result,index=None)
-    print(trending_df)
+    # trending_df = pd.DataFrame(result,index=None)
+    # print(trending_df)
 
-    trending_df.to_csv('trending_videos.csv',index=0)
+    # trending_df.to_csv('trending_videos.csv',index=0)
+
+    #Sending email
+
+    
+
+
+
+
+appP= "lnqpdrsvuqeuuzze"
+
 
